@@ -1,6 +1,10 @@
 # svc-line-app
 
+Deployed on 
+
+- https://svc-line-app.herokuapp.com/
+
 To do ahead
-- Make slider for x-axis - Time series data
+- Make a Linear Regression model for predictions  
 - cache data for better performance
 
