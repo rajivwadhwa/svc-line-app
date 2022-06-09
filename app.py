@@ -42,7 +42,7 @@ st.markdown("##")
 st.subheader("Any Caption or Date updated etc")
 st.markdown("---")
 
-data_dcode = pd.read_csv('dcode.csv', index_col=False, parse_dates=True)
+data_dcode = pd.read_csv('dcode.csv', parse_dates=True).reset_index(drop=True)
 #data_dcode.index = pd.to_datetime(data_dcode.index)
 
 
