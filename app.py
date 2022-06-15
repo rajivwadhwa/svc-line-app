@@ -38,7 +38,7 @@ def download_image(img_key):
 st.title(":bar_chart: RIN and LCFS Environmental Attribute Markets Dashboard - Renewable Natural Gas Revenue Driver")
 st.markdown("##")
 
-st.subheader("*Investment, Policy & Economics Service Line, Americas. Key Contacts: Nikhil Khurana & Kandasamy Sivasubramanian*")
+st.subheader("*Investment, Policy & Economics Service Line, Americas.* \n**Key Contacts: Nikhil Khurana & Kandasamy Sivasubramanian**")
 st.markdown(""" **Note**
 
              This dashboard contains up to date information on market pricing for :
