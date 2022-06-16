@@ -10,7 +10,7 @@ from sklearn.model_selection import train_test_split
 
 
 
-st.set_page_config(page_title = "RIN and LCFS Environmental Attribute Markets Dashboard - Renewable Natural Gas Revenue Driver",
+st.set_page_config(page_title = "RIN and LCFS Environmental Attribute Markets Dashboard - Renewable Natural Gas Revenue Drivers",
                    page_icon = ':bar_chart:',
                    layout = "wide")
 
@@ -35,22 +35,24 @@ def download_image(img_key):
 
 # ---- MAINPAGE -----
 
-st.title(":bar_chart: RIN and LCFS Environmental Attribute Markets Dashboard - Renewable Natural Gas Revenue Driver")
+st.title(":bar_chart: RIN and LCFS Environmental Attribute Markets Dashboard - Renewable Natural Gas Revenue Drivers")
 st.markdown("##")
 
-st.subheader("*Investment, Policy & Economics Service Line, Americas.* \n**Key Contacts: Nikhil Khurana & Kandasamy Sivasubramanian**")
-st.markdown(""" **Note**
-
-             This dashboard contains up to date information on market pricing for :
-
-                1. Renewable Identification Number (RIN) credits regulated under the Federal Renewable Fuel Standard (RFS).
-                2. Low Carbon Fuel Standard (LCFS) credits regulated under the California LCFS program.
-                3. Clean Fuels Program (CFP) credits regulated under Oregons CFP program.
-
+st.subheader("*Investment, Policy & Economics Service Line, Americas. Key Contacts: Nikhil Khurana & Kandasamy Sivasubramanian*")
+st.markdown(""" This dashboard contains up to date information on market pricing for :  
+                1.Renewable Identification Number (RIN) credits regulated under the Federal Renewable Fuel Standard (RFS).  
+                2.Low Carbon Fuel Standard (LCFS) credits regulated under the California LCFS program.  
+                3.Clean Fuels Program (CFP) credits regulated under Oregons CFP program.  
     In simple terms, these credits, also called environmental attributes, are generated when Renewable Natural Gas (RNG) is produced and sold to transportation users.
     These credits typically provide > 80% of the revenue for an RNG project, and are key drivers of project feasibility. 
 
     *Source of information: EcoEngineers Daily RIN, LCFS & CFP Update Reports. This source should be credited if this information is shared externally.
+    """)
+
+st.markdown(""" **Notes on RIN Price information :**
+
+    -- There are several different types of RINs, differentiated by their 'd-code'. The RIN types relevant for RNG projects are D5 RINs (where food waste feedstock is used) and D3 RINs (landfill gas, manure, wastewater feedstocks).  
+    -- RINs have an associated 'vintage', which relates to the year in which the RIN credit is 'retired' by its holder to meet its compliance needs. Vintage is not important when assessing future RNG project feasibility. The prices shown for RIN credits below are the average values across the three vintage years for which data is available.
     """)
 
 st.markdown("---")
@@ -143,13 +145,14 @@ with left_column:
     
     # ---- Charts ------
     st.markdown("---")
-    st.subheader('RIN Price Charts')
+    st.subheader('RIN Price Chart')
     
     # Average Price
     fig_dcode_ap20, ax_dcode = plt.subplots()
     sns.lineplot(x="Date", y='Average Price', hue="DCode",  data=d_code_selection,  ax=ax_dcode ) #, alpha=.5, ax=ax2, ,  palette='husl'
     plt.xticks(rotation=60)
     ax_dcode.xaxis.set_major_formatter(date_form)
+    ax_dcode.yaxis.set_major_formatter('${x:1.2f}')
     plt.xlabel(" ")
     plt.ylabel("RIN Price ($/credit)")
     
@@ -174,7 +177,7 @@ with right_column:
 
     # ---- Charts ------
     st.markdown("---")
-    st.subheader('California LCFS and Oregon CFP Price Charts')
+    st.subheader('California LCFS and Oregon CFP Price Chart')
 
 
     credit_selection[['Average Price', 'Closing Value']] = credit_selection[['Average Price', 'Closing Value']].apply(lambda x: x.str.replace('$', '')).astype(float)
@@ -184,6 +187,7 @@ with right_column:
     sns.lineplot(ax=axes, x="Date", y='Average Price', hue="Credit",  data=credit_selection, palette='BuPu')
     plt.xticks(rotation=60)
     axes.xaxis.set_major_formatter(date_form)
+    axes.yaxis.set_major_formatter('${x:1.2f}')
     plt.xlabel(" ")
     plt.ylabel("Credit prices ($/MTCO2eq)")
     st.pyplot(fig)
@@ -195,7 +199,6 @@ with right_column:
 
 st.subheader("Additional notes and references")
 st.markdown("---")
-
 
 
 
