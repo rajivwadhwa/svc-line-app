@@ -239,3 +239,16 @@ Additional references:
 Please liaise with our Commercial Team within GHD Advisory and our Future Energy teams to get in contact with our inhouse specialists who have deep familiarity with these programs.
 """)
 st.markdown("---")
+
+
+
+# ---- Extra required --- 
+hide_streamlit_style = """
+            <style>
+            #MainMenu {visibility: hidden;}
+            footer {visibility: hidden;}
+            </style>
+            """
+st.markdown(hide_streamlit_style, unsafe_allow_html=True)
+
+
