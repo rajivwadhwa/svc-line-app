@@ -1,7 +1,7 @@
 mkdir -p ~/.streamlit/
 
 echo "\
-"[theme]\n\
+[theme]\n\
 font = ‘serif’
 [server]\n\
 port = $PORT\n\
