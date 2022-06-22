@@ -181,7 +181,7 @@ st.markdown("---")
 # ---------- Credit Side ----------
 
 with right_column:
-    st.subheader('California LCFS and Oregon CFP Price Data')
+    st.subheader('California LCFS, Oregon CFP Price Data')
     st.dataframe(credit_selection)
 
     download_file = credit_selection.to_csv().encode('utf-8')
