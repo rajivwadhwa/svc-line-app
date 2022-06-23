@@ -166,7 +166,7 @@ with left_column:
     ax_dcode.grid(which='minor', alpha=0.2)
     ax_dcode.grid(which='major', alpha=0.5)
     
-    plt.xticks(rotation=60)    
+    plt.xticks(rotation=60, ha='right', rotation_mode='anchor')    
     plt.xlabel(" ")
     plt.ylabel("RIN Price ($/credit)")
     plt.legend(loc='upper left')
@@ -213,7 +213,7 @@ with right_column:
     axes.grid(which='minor', alpha=0.2)
     axes.grid(which='major', alpha=0.5)
 
-    plt.xticks(rotation=60)
+    plt.xticks(rotation=60, ha='right', rotation_mode='anchor')
     plt.xlabel(" ")
     plt.ylabel("Credit prices ($/MTCO2eq)")
 
