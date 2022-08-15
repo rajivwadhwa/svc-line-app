@@ -36,11 +36,11 @@ def download_image(img_key):
 
 # ---- MAINPAGE -----
 
-st.title(":bar_chart: Attribute Markets Dashboard - Renewable Natural Gas Revenue Drivers")
+st.title(":bar_chart: Sample Dashboard - Renewable Natural Gas Revenue Drivers")
 st.markdown("##")
 
 
-st.markdown(""" This dashboard contains up to date information on market pricing for :  
+st.markdown(""" This dashboard contains sample information on market pricing for :  
                 1.Renewable Identification Number (RIN) credits regulated under the Federal Renewable Fuel Standard (RFS).  
                 2.Low Carbon Fuel Standard (LCFS) credits regulated under the California LCFS program.  
                 3.Clean Fuels Program (CFP) credits regulated under Oregons CFP program.  
@@ -111,8 +111,7 @@ except:
     "Please select a Dcode"
 
 #----- Update Remark ----
-st.markdown(f"""Date of last update = {data_dcode['Date'].iat[0]} .  Price information is up to this date.
-If you require a data refresh to today’s date, please contact Kandasamy Sivasubramanian.""")
+st.markdown(f"""Date of last update = {data_dcode['Date'].iat[0]} .  Price information is up to this date.""")
 
 # ---- Final dataframe ----
 date_form = DateFormatter("%m-%d-%Y")
@@ -273,7 +272,7 @@ except:
 
 credit_selection['Date'] = pd.to_datetime(credit_selection['Date'])  
 credit_selection['Date_Delta'] = (credit_selection['Date'] - credit_selection['Date'].min())  / np.timedelta64(1,'D')
-date_predict = '06-10-2022'
+date_predict = '11-10-2022'
 
 def model_credit(df, X_test):
     if len(df) == 0:
