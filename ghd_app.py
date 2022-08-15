@@ -11,7 +11,7 @@ from sklearn.model_selection import train_test_split
 
 
 
-st.set_page_config(page_title = "RIN and LCFS Environmental Attribute Markets Dashboard - Renewable Natural Gas Revenue Drivers",
+st.set_page_config(page_title = "Environmental Attribute Dashboard - Renewable Natural Gas Revenue Drivers",
                    page_icon = ':bar_chart:',
                    layout = "wide")
 
@@ -36,10 +36,10 @@ def download_image(img_key):
 
 # ---- MAINPAGE -----
 
-st.title(":bar_chart: RIN and LCFS Environmental Attribute Markets Dashboard - Renewable Natural Gas Revenue Drivers")
+st.title(":bar_chart: Attribute Markets Dashboard - Renewable Natural Gas Revenue Drivers")
 st.markdown("##")
 
-st.subheader("*Investment, Policy & Economics Service Line, Americas. Key Contacts: Nikhil Khurana & Kandasamy Sivasubramanian*")
+
 st.markdown(""" This dashboard contains up to date information on market pricing for :  
                 1.Renewable Identification Number (RIN) credits regulated under the Federal Renewable Fuel Standard (RFS).  
                 2.Low Carbon Fuel Standard (LCFS) credits regulated under the California LCFS program.  
@@ -224,21 +224,106 @@ with right_column:
 
 # -------------Extra -------------
 
-st.subheader("Additional notes and references")
+st.subheader("Sample Linear regression prediction in RT")
 st.markdown("---")
 
-st.markdown("""
-Additional references:
 
- - Introductory information on RIN credits and the RFS program: https://www.sourcena.com/sourceline/the-abcs-of-the-rfs-and-rins/
- - Introductory information on the California LCFS credits and program: https://ww2.arb.ca.gov/resources/documents/lcfs-basics
- - Introductory information on the Oregon CFP credits and program: https://www.turnermason.com/newsletter/snapshot-lcfs-california-versus-oregon/
- - Historical price points for RIN credits (pre-2021): https://www.epa.gov/fuels-registration-reporting-and-compliance-help/rin-trades-and-price-information
- - Historical price points for California LCFS and Oregon CFP credits (pre-2021): https://www.turnermason.com/newsletter/snapshot-lcfs-california-versus-oregon/
+# ---Predicting DCode df----
 
-Please liaise with our Commercial Team within GHD Advisory and our Future Energy teams to get in contact with our inhouse specialists who have deep familiarity with these programs.
-""")
-st.markdown("---")
+d_code_selection['Date'] = pd.to_datetime(d_code_selection['Date'])  
+d_code_selection['Date_Delta'] = (d_code_selection['Date'] - d_code_selection['Date'].min())  / np.timedelta64(1,'D')
+date_predict = '09-10-2022'
+
+
+def model(df, X_test):
+    if len(df) == 0:
+        return "Please select d-code for its prediction"
+    else:
+        y = np.array(df[['Average Price-2022']]).reshape(-1, 1)
+        X = np.array(df[['Date_Delta']]).reshape(-1, 1)
+        return np.squeeze(LinearRegression().fit(X, y).predict(np.array(X_test).reshape(1, -1)))
+
+def group_predictions(df, date):
+
+    if len(df) == 0:
+        return "Please select d-code for its prediction"
+    else:
+        
+        date = pd.to_datetime(date)
+        df.Date = pd.to_datetime(df.Date)
+
+        day = np.timedelta64(1, 'D')
+        mn = df.Date.min()
+        df['Date_Delta'] = df.Date.sub(mn).div(day)
+
+        dd = (date - mn) / day
+
+        return df.groupby('DCode').apply(model, X_test=dd)
+
+
+try:
+    list_of_res = group_predictions(d_code_selection, date_predict)
+
+    prediction_dcode = pd.DataFrame(list_of_res, columns=[f'predicted value for {date_predict}']).reset_index()
+    prediction_dcode[f'predicted value for {date_predict}'] = prediction_dcode[f'predicted value for {date_predict}'].astype(float)
+except:
+    "Error in predicting D-Code"    
+
+#----Predicting Credit df----
+
+credit_selection['Date'] = pd.to_datetime(credit_selection['Date'])  
+credit_selection['Date_Delta'] = (credit_selection['Date'] - credit_selection['Date'].min())  / np.timedelta64(1,'D')
+date_predict = '06-10-2022'
+
+def model_credit(df, X_test):
+    if len(df) == 0:
+        return "Please select a Credit from drop-down menu for its prediction"
+    else: 
+        y = np.array(df[['Average Price']]).reshape(-1, 1)
+        X = np.array(df[['Date_Delta']]).reshape(-1, 1)
+        return np.squeeze(LinearRegression().fit(X, y).predict(np.array(X_test).reshape(1, -1)))
+
+def group_predictions_credit(df, date):
+    if len(df) == 0:
+        return "Please select a Credit from drop-down menu for its prediction"
+    else:
+        date = pd.to_datetime(date)
+        df.Date = pd.to_datetime(df.Date)
+
+        day = np.timedelta64(1, 'D')
+        mn = df.Date.min()
+        df['Date_Delta'] = df.Date.sub(mn).div(day)
+
+        dd = (date - mn) / day
+
+        return df.groupby('Credit').apply(model_credit, X_test=dd)
+
+try:
+    list_of_res = group_predictions_credit(credit_selection, date_predict)
+    prediction_credit = pd.DataFrame(list_of_res, columns=[f'predicted value for {date_predict}']).reset_index()
+    prediction_credit[f'predicted value for {date_predict}'] = prediction_credit[f'predicted value for {date_predict}'].astype(float)
+except:
+    "Error in Predicting Credit"  
+
+
+#-------------Printing----------------
+
+left_column, right_column = st.columns(2)
+
+with left_column:
+    st.subheader(f'Predictions RIN')
+    try:
+        st.dataframe(prediction_dcode)
+    except:
+        "Please select a D-Code to predict"
+    
+with right_column:
+    st.subheader(f'Predictions Credits')
+    try:
+        st.dataframe(prediction_credit)
+    except:
+        "Please select a Credit Name to predict"
+    
 
 
 
