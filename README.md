@@ -2,7 +2,7 @@
 
 Deployed on 
 
-- https://svc-line-app.herokuapp.com/
+- https://rt-ml-webapp.herokuapp.com/
 
 
 
