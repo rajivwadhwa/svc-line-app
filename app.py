@@ -10,7 +10,7 @@ from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 
 
-
+# Page heaading
 st.set_page_config(page_title = "Environmental Attribute Dashboard - Renewable Natural Gas Revenue Drivers",
                    page_icon = ':bar_chart:',
                    layout = "wide")
@@ -18,6 +18,7 @@ st.set_page_config(page_title = "Environmental Attribute Dashboard - Renewable N
 
 #----------Supporting Functions---------
 
+# Download button st
 def download_image(img_key):
     b = io.BytesIO()
     plt.savefig(b, format='png')
@@ -35,11 +36,12 @@ def download_image(img_key):
 
 
 # ---- MAINPAGE -----
-
+# Title
 st.title(":bar_chart: Sample Dashboard - Renewable Natural Gas Revenue Drivers")
 st.markdown("##")
 
 
+#Some writeup
 st.markdown(""" This dashboard contains sample information on market pricing for :  
                 1.Renewable Identification Number (RIN) credits regulated under the Federal Renewable Fuel Standard (RFS).  
                 2.Low Carbon Fuel Standard (LCFS) credits regulated under the California LCFS program.  
@@ -66,8 +68,7 @@ data_credit = pd.read_csv('credit.csv', parse_dates=True)
 # data_credit['Date'] = pd.to_datetime(data_credit["Date"].dt.strftime('%Y-%m-%d'))
 
 # --- sidebar---
-
-
+# Page layout
 st.sidebar.header("Please select filter")
 
 dcode = st.sidebar.multiselect(
@@ -119,8 +120,8 @@ days = DayLocator(interval=14)
 left_column, right_column = st.columns(2)
     
 
-# ---------DCode side ---------
-   
+# ---------LHS side ---------
+# Dataframe slicing   
 d_code_selection[['Average Price-2020', 'Average Price-2021', 'Average Price-2022', 'Closing Value-2020','Closing Value-2021','Closing Value-2022']] = d_code_selection[['Average Price-2020', 'Average Price-2021', 'Average Price-2022', 'Closing Value-2020','Closing Value-2021','Closing Value-2022']].apply(lambda x: x.str.replace('$', '')).astype(float)
 d_code_selection['Date'] = pd.to_datetime(d_code_selection['Date'])
 
@@ -134,10 +135,12 @@ to_show_dcode = d_code_selection[['DCode','Date','Average Price','Closing Value'
 to_show_dcode[['Average Price','Closing Value']] = to_show_dcode[['Average Price','Closing Value']].apply(lambda x: '$'+ x.astype(str))
 to_show_dcode['Date'] = pd.to_datetime(to_show_dcode['Date']).dt.strftime('%Y/%m/%d')
 
+# st left side data visualization
 with left_column:
     st.subheader('RIN Price Data')
     st.dataframe(to_show_dcode)
-
+    
+    # Download csv button
     download_file = d_code_selection.to_csv().encode('utf-8')
     st.download_button(
          label="Download DCode as CSV",
@@ -149,7 +152,6 @@ with left_column:
     st.subheader('RIN Price Chart')
     
     # Average Price
-
     fig_dcode_ap20, ax_dcode = plt.subplots()
     sns.lineplot(x="Date", y='Average Price', hue="DCode",  data=d_code_selection,  ax=ax_dcode ) #, alpha=.5, ax=ax2, ,  palette='husl'
 
@@ -178,7 +180,7 @@ st.markdown("---")
    
     
 # ---------- Credit Side ----------
-
+# st right side data visualization
 with right_column:
     st.subheader('California LCFS, Oregon CFP Price Data')
     st.dataframe(credit_selection)
@@ -228,7 +230,7 @@ st.markdown("---")
 
 
 # ---Predicting DCode df----
-
+# Using RT Simple Linear Regression
 d_code_selection['Date'] = pd.to_datetime(d_code_selection['Date'])  
 d_code_selection['Date_Delta'] = (d_code_selection['Date'] - d_code_selection['Date'].min())  / np.timedelta64(1,'D')
 date_predict = '09-10-2022'
@@ -327,6 +329,7 @@ with right_column:
 
 
 # ---- Extra required --- 
+# To remove st-marks on the page
 hide_streamlit_style = """
             <style>
             #MainMenu {visibility: hidden;}
